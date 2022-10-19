@@ -281,7 +281,8 @@ commands will detect it and remind you to do so if necessary.
 vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ terraform plan
 ```
 
-Применение Terraform плана
+- Применение Terraform плана
+
 ```bash
 vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ terraform apply
 .....
@@ -300,6 +301,6 @@ vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ /home/vk/yandex-cloud/bin/yc compu
 +----------------------+--------+---------------+---------+---------------+----------------+
 
 ```
-![IMG](pic/yc-instance-list.png)
+![IMG](pic/yc-instance-list.PNG)
 
 
