@@ -201,4 +201,4 @@ vk@vkvm:~/DZ5.4-Docker-Compose$ /home/vk/yandex-cloud/bin/yc compute image list
 +----------------------+---------------+--------+----------------------+--------+
 ```
 
-![IMG](pic/yc-image-list.png)
+![IMG](pic/yc-image-list.PNG)
