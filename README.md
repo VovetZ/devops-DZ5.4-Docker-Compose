@@ -303,4 +303,99 @@ vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ /home/vk/yandex-cloud/bin/yc compu
 ```
 ![IMG](pic/yc-instance-list.PNG)
 
+## Задача 3
 
+Создать ваш первый готовый к боевой эксплуатации компонент мониторинга, состоящий из стека микросервисов.
+
+Для получения зачета, вам необходимо предоставить:
+- Скриншот работающего веб-интерфейса Grafana с текущими метриками, как на примере ниже
+
+
+## Ответ
+
+### Деплой ПО и стека микросервисов на виртуальную машину в Yandex.Cloud
+
+```bash
+# cd ../ansible/
+```
+
+- Настройка/указание внешнего IP-адреса, который был назначен на вирт.машину и выведен на консоль по завершению команды `terraform apply` в `../ansible/inventory`
+
+- Подготовка ПО и запуск стека микросервисов
+```bash
+# vk@vkvm:~/DZ5.4-Docker-Compose/src/ansible$ ansible-playbook provision.yml
+
+PLAY [nodes] ***************************************************************************
+
+TASK [Gathering Facts] *****************************************************************
+ok: [node01.netology.cloud]
+
+TASK [Create directory for ssh-keys] ***************************************************
+ok: [node01.netology.cloud]
+
+TASK [Adding rsa-key in /root/.ssh/authorized_keys] ************************************
+ok: [node01.netology.cloud]
+
+TASK [Checking DNS] ********************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Installing tools] ****************************************************************
+ok: [node01.netology.cloud] => (item=['git', 'curl'])
+
+TASK [Add docker repository] ***********************************************************
+changed: [node01.netology.cloud]
+
+TASK [Installing docker package] *******************************************************
+ok: [node01.netology.cloud] => (item=['docker-ce', 'docker-ce-cli', 'containerd.io'])
+
+TASK [Enable docker daemon] ************************************************************
+ok: [node01.netology.cloud]
+
+TASK [Install docker-compose] **********************************************************
+changed: [node01.netology.cloud]
+
+TASK [Synchronization] *****************************************************************
+changed: [node01.netology.cloud]
+
+TASK [Pull all images in compose] ******************************************************
+changed: [node01.netology.cloud]
+
+TASK [Up all services in compose] ******************************************************
+changed: [node01.netology.cloud]
+
+PLAY RECAP *****************************************************************************
+node01.netology.cloud      : ok=12   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+- Проверяем запущенные микросервисы
+
+```bash
+⋊> ~/D/s/ansible ssh centos@62.84.119.210
+[centos@node01 stack]$ cd /opt/stack/
+[centos@node01 stack]$ sudo docker-compose ps
+    Name                 Command                 State                  Ports           
+----------------------------------------------------------------------------------------
+alertmanager   /bin/alertmanager --config     Up             9093/tcp                   
+               ...                                                                      
+caddy          /sbin/tini -- caddy -agree     Up             0.0.0.0:3000->3000/tcp,    
+               ...                                           0.0.0.0:9090->9090/tcp,    
+                                                             0.0.0.0:9091->9091/tcp,    
+                                                             0.0.0.0:9093->9093/tcp     
+cadvisor       /usr/bin/cadvisor              Up (healthy)   8080/tcp                   
+               -logtostderr                                                             
+grafana        /run.sh                        Up             3000/tcp                   
+nodeexporter   /bin/node_exporter --path.     Up             9100/tcp                   
+               ...                                                                      
+prometheus     /bin/prometheus --config.f     Up             9090/tcp                   
+               ...                                                                      
+pushgateway    /bin/pushgateway               Up             9091/tcp                   
+```
+
+- Логинимся в админку Grafana
+
+http://62.84.119.210:3000/login
+
+```bash
+Login: admin
+Password: admin
+```
+![IMG](pic/yc-grafana.PNG)
