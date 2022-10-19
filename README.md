@@ -202,3 +202,104 @@ vk@vkvm:~/DZ5.4-Docker-Compose$ /home/vk/yandex-cloud/bin/yc compute image list
 ```
 
 ![IMG](pic/yc-image-list.PNG)
+
+## Задача 2
+
+Создать вашу первую виртуальную машину в Яндекс.Облаке.
+
+Для получения зачета, вам необходимо предоставить:
+- Скриншот страницы свойств созданной ВМ, как на примере 
+
+## Ответ:
+
+Настройка следующих идентификаторов в файле `terraform/variables.tf`:
+- облака (доступен по команде `yc config list`)
+- каталога (доступен по команде `yc config list`)
+- образа (доступен по команде `yc compute image list`)
+
+```bash
+vk@vkvm:~/DZ5.4-Docker-Compose$ /home/vk/yandex-cloud/bin/yc compute image list
++----------------------+---------------+--------+----------------------+--------+
+|          ID          |     NAME      | FAMILY |     PRODUCT IDS      | STATUS |
++----------------------+---------------+--------+----------------------+--------+
+| fd8dia13nd7gtsp0nt4j | centos-7-base | centos | f2euv1kekdgvc0jrpaet | READY  |
++----------------------+---------------+--------+----------------------+--------+
+vk@vkvm:~/DZ5.4-Docker-Compose$ /home/vk/yandex-cloud/bin/yc config list
+token: y0_AgAAAAAOtAxpAATuwQAAAADRnsLim9Hdeg99QmGyszbA07BkNdN14BE
+cloud-id: b1ggidd5mp363gkiouv2
+folder-id: b1g12il7uurh00pne60k
+compute-default-zone: ru-central1-a
+```
+
+### Разворачивание инфраструктуры с помощью Terraform
+
+- Установка Terraform 
+
+```bash
+vk@vkvm:~/DZ5.4-Docker-Compose$ wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+vk@vkvm:~/DZ5.4-Docker-Compose$ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+vk@vkvm:~/DZ5.4-Docker-Compose$ sudo apt update && sudo apt install terraform
+vk@vkvm:~/DZ5.4-Docker-Compose$ terraform --version
+Terraform v1.3.2
+on linux_amd64
+```
+
+- Инициализация конфигурации
+
+```bash
+vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ terraform init
+
+Initializing the backend...
+
+Initializing provider plugins...
+- Finding latest version of yandex-cloud/yandex...
+- Installing yandex-cloud/yandex v0.80.0...
+- Installed yandex-cloud/yandex v0.80.0 (self-signed, key ID E40F590B50BB8E40)
+
+Partner and community providers are signed by their developers.
+If you'd like to know more about provider signing, you can read about it here:
+https://www.terraform.io/docs/cli/plugins/signing.html
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+
+- Запуск проверки плана Terraform
+```bash
+vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ terraform plan
+```
+
+Применение Terraform плана
+```bash
+vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ terraform apply
+.....
+
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+external_ip_address_node01_yandex_cloud = "62.84.119.210"
+internal_ip_address_node01_yandex_cloud = "192.168.101.22"
+vk@vkvm:~/DZ5.4-Docker-Compose/src/terraform$ /home/vk/yandex-cloud/bin/yc compute instance list
++----------------------+--------+---------------+---------+---------------+----------------+
+|          ID          |  NAME  |    ZONE ID    | STATUS  |  EXTERNAL IP  |  INTERNAL IP   |
++----------------------+--------+---------------+---------+---------------+----------------+
+| fhmmbof3nlumb7ubtgar | node01 | ru-central1-a | RUNNING | 62.84.119.210 | 192.168.101.22 |
++----------------------+--------+---------------+---------+---------------+----------------+
+
+```
+![IMG](pic/yc-instance-list.png)
+
+
