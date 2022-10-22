@@ -225,7 +225,7 @@ vk@vkvm:~/DZ5.4-Docker-Compose$ /home/vk/yandex-cloud/bin/yc compute image list
 | fd8dia13nd7gtsp0nt4j | centos-7-base | centos | f2euv1kekdgvc0jrpaet | READY  |
 +----------------------+---------------+--------+----------------------+--------+
 vk@vkvm:~/DZ5.4-Docker-Compose$ /home/vk/yandex-cloud/bin/yc config list
-token: y0_AgAAAAAOtAxpAATuwQAAAADRnsLim9Hdeg99QmGyszbA07BkNdN14BE
+token: y0_AgAAAAAO*****************
 cloud-id: b1ggidd5mp363gkiouv2
 folder-id: b1g12il7uurh00pne60k
 compute-default-zone: ru-central1-a
